@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: transparent; overflow: hidden; }
+    img {
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+    }
+    #fout {
+      color: red;
+      font-family: sans-serif;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <img id="afbeelding" src="" alt="Screenshot" onclick="stuurBericht()">
+  <div id="fout" style="display:none">Geen afbeelding opgegeven in de URL.</div>
+
+  <script>
+    // Haal de src parameter op uit de URL
+    var params = new URLSearchParams(window.location.search);
+    var src = params.get('src');
+
+    if (src) {
+      // Als het geen volledige URL is, voeg de GitHub base URL toe
+      if (!src.startsWith('http')) {
+        src = 'https://jonathan1-2.github.io/Afbeeldingen_NMBRS_Handboek/' + src;
+      }
+      document.getElementById('afbeelding').src = src;
+    } else {
+      document.getElementById('afbeelding').style.display = 'none';
+      document.getElementById('fout').style.display = 'block';
+    }
+
+    function stuurBericht() {
+      window.parent.postMessage({
+        type: 'openImage',
+        src: document.getElementById('afbeelding').src
+      }, '*');
+    }
+  </script>
+
+</body>
+</html>
